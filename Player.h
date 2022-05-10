@@ -7,22 +7,21 @@ public:
 	Player();
 	~Player();
 	void setCoin(int);
-	int getCoin();
-	void setPoint(int);
-	int getPoint();
-	int getPlayerCount();
-	void printHandCards();
-	void addCard(Deck);
-	void sumPoint();
-	void addCoin();
-	void subtract();
+	int getCoin() const;
+	int getPoint() const;
+	int getPlayerCount() const;
+	void printHandCards() const;
+	void addCard(Deck&);
+	void addCoin(int);
+	void subtractCoin(int);
 	void clearCard();
 private:
 	int coin;
-	int point;
 	int handCardsSize;
 	Card* handCards;
 	static int playerCount;
+
+	friend class BlackJack;
 };
 
 #endif
