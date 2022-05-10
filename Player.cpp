@@ -4,7 +4,7 @@ using namespace std;
 
 int Player::playerCount = 0;
 
-Player::Player() :coin(1000), point(0), handCardsSize(0), handCards(new Card[handCardsSize]) {
+Player::Player() :coin(1000), handCardsSize(0), handCards(new Card[handCardsSize]) {
 	playerCount++;
 }
 Player::~Player() {
@@ -13,24 +13,25 @@ Player::~Player() {
 void Player::setCoin(int newC) {
 	coin = newC;
 }
-int Player::getCoin() {
+int Player::getCoin() const {
 	return coin;
 }
-void Player::setPoint(int newP) {
-	point = newP;
-}
-int Player::getPoint() {
+int Player::getPoint() const {
+	int point = 0;
+	for (int i = 0; i < handCardsSize; i++) {
+		point += handCards[i].Point();
+	}
 	return point;
 }
-int Player::getPlayerCount() {
+int Player::getPlayerCount() const {
 	return playerCount;
 }
-void Player::printHandCards() {
+void Player::printHandCards() const {
 	for (int i = 0; i < handCardsSize; i++) {
 		cout << handCards[i].getSuit() << " " << handCards[i].getSymbol() << endl;
 	}
 }
-void Player::addCard(Deck deck) {
+void Player::addCard(Deck& deck) {
 	Card* old = handCards;
 	handCards = new Card[++handCardsSize];
 	for (int i = 0; i < handCardsSize; i++) {
@@ -39,16 +40,11 @@ void Player::addCard(Deck deck) {
 	handCards[handCardsSize - 1] = deck.getLastCard();
 	delete old;
 }
-void Player::sumPoint() {
-	for (int i = 0; i < handCardsSize; i++) {
-		point += handCards[i].Point();
-	}
+void Player::addCoin(int much) {
+	coin += much;
 }
-void Player::addCoin() {
-	coin += 100;
-}
-void Player::subtract() {
-	coin -= 100;
+void Player::subtractCoin(int much) {
+	coin -= much;
 }
 void Player::clearCard() {
 	handCardsSize = 0;
