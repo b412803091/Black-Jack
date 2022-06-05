@@ -2,13 +2,9 @@
 #include<iostream>
 using namespace std;
 
-int Player::playerCount = 0;
+Player::Player() :coin(1000), handCardsSize(0), handCards(new Poker[handCardsSize])
+				,isBust(false),isStand(false),playerID(0) {
 
-Player::Player() :coin(1000), handCardsSize(0), handCards(new Card[handCardsSize]) {
-	playerCount++;
-}
-Player::~Player() {
-	playerCount--;
 }
 void Player::setCoin(int newC) {
 	coin = newC;
@@ -18,35 +14,79 @@ int Player::getCoin() const {
 }
 int Player::getPoint() const {
 	int point = 0;
+
 	for (int i = 0; i < handCardsSize; i++) {
-		point += handCards[i].Point();
+		if (handCards[i].getNumber() < 11 && handCards[i].getNumber() > 1)
+			point += handCards[i].getNumber();
+		else if (handCards[i].getNumber() > 10)
+			point += 10;
+	}
+	for (int i = 0; i < handCardsSize; i++) {
+		if (handCards[i].getNumber() == 1 && point < 11)
+			point += 11;
+		else if (handCards[i].getNumber() == 1)
+			point++;
 	}
 	return point;
 }
-int Player::getPlayerCount() const {
-	return playerCount;
+void Player::setHandCards(Poker* newH) {
+	handCards = newH;
 }
-void Player::printHandCards() const {
-	for (int i = 0; i < handCardsSize; i++) {
-		cout << handCards[i].getSuit() << " " << handCards[i].getSymbol() << endl;
-	}
+Poker Player::getHandCard(int index) const {
+	if (index >= 0 && index < handCardsSize)
+		return handCards[index];
+	else
+		NULL;
 }
-void Player::addCard(Deck& deck) {
-	Card* old = handCards;
-	handCards = new Card[++handCardsSize];
-	for (int i = 0; i < handCardsSize; i++) {
-		handCards[i] = old[i];
+Poker Player::getLastHandCard() const {
+	return handCards[handCardsSize - 1];
+}
+void Player::setHandCardsSize(int newS) {
+	handCardsSize = newS;
+}
+int Player::getHandCardsSize() const {
+	return handCardsSize;
+}
+void Player::addCard(Poker card) {
+	Poker* old = handCards;
+	handCards = new Poker[++handCardsSize];
+	if(handCardsSize!=1){
+		for (int i = 0; i < handCardsSize; i++) {
+			handCards[i] = old[i];
+		}
 	}
-	handCards[handCardsSize - 1] = deck.getLastCard();
+	handCards[handCardsSize -1] = card;
 	delete old;
 }
 void Player::addCoin(int much) {
 	coin += much;
 }
-void Player::subtractCoin(int much) {
-	coin -= much;
-}
 void Player::clearCard() {
 	handCardsSize = 0;
-	handCards = new Card[++handCardsSize];
+	delete handCards;
+	handCards = new Poker[handCardsSize];
+}
+void Player::isBustCheck() {
+	if (getPoint() > 21) {
+		setIsBust(true);
+		setIsStand(true);
+	}
+}
+int Player::getPlayerID() const {
+	return playerID;
+}
+bool Player::getIsBust() const {
+	return isBust;
+}
+bool Player::getIsStand() const {
+	return isStand;
+}
+void Player::setIsBust(bool x) {
+	isBust = x;
+}
+void Player::setIsStand(bool x) {
+	isStand = x;
+}
+void Player::setPlayerID(int newID) {
+	playerID = newID;
 }
