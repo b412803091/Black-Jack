@@ -1,27 +1,36 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include "Deck.h"
+
+#include "Poker.h"
 
 class Player {
 public:
 	Player();
-	~Player();
 	void setCoin(int);
 	int getCoin() const;
 	int getPoint() const;
-	int getPlayerCount() const;
-	void printHandCards() const;
-	void addCard(Deck&);
+	void setHandCards(Poker*);
+	Poker getHandCard(int) const;
+	Poker getLastHandCard() const;
+	void setHandCardsSize(int);
+	int getHandCardsSize() const;
+	void addCard(Poker);
 	void addCoin(int);
-	void subtractCoin(int);
 	void clearCard();
+	void isBustCheck();
+	bool getIsBust() const;
+	bool getIsStand() const;
+	int getPlayerID() const;
+	void setIsBust(bool);
+	void setIsStand(bool);   
+	void setPlayerID(int);
 private:
 	int coin;
 	int handCardsSize;
-	Card* handCards;
-	static int playerCount;
-
-	friend class BlackJack;
+	Poker* handCards;
+	bool isBust;
+	bool isStand;
+	int playerID;
 };
 
 #endif
